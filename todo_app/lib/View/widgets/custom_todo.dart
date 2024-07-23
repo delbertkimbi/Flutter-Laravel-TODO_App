@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-// ignore: must_be_immutable
 class CustomTodo extends StatefulWidget {
-  CustomTodo({
+  const CustomTodo({
     super.key,
     required this.deleteFunction,
     required this.onChanged,
     required this.name,
     required this.descript,
+    required this.completed,
   });
-  Function(BuildContext)? deleteFunction;
-  Function(BuildContext)? editFunction;
-  Function(bool)? onChanged;
+
+  final Function(BuildContext)? deleteFunction;
+  final void Function(bool?)? onChanged;
   final String name;
   final String? descript;
+  final bool completed;
 
   @override
   State<CustomTodo> createState() => _CustomTodoState();
 }
 
 class _CustomTodoState extends State<CustomTodo> {
-  bool isChecked = false; // Initial state of the checkbox
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -54,12 +54,8 @@ class _CustomTodoState extends State<CustomTodo> {
           children: [
             Checkbox(
               checkColor: Colors.white,
-              value: isChecked,
-              onChanged: (value) {
-                setState(() {
-                  isChecked = value!;
-                });
-              },
+              value: widget.completed,
+              onChanged: widget.onChanged,
             ),
             Expanded(
               child: Column(
@@ -69,14 +65,18 @@ class _CustomTodoState extends State<CustomTodo> {
                   Text(
                     widget.name,
                     style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     widget.descript!.length < 15
                         ? widget.descript!
                         : "${widget.descript!.substring(0, 15)}...",
                     style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.normal),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ],
               ),

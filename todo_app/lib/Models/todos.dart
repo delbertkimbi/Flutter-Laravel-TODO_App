@@ -1,13 +1,32 @@
-class Todos {
-  final String title;
-  final String description;
-  final String starTime;
-  final String endTime;
+class Todo {
+  int id;
+  String title;
+  String description;
+  bool completed;
 
-  Todos(
-      {required this.title,
-      required this.description,
-      required this.starTime,
-      required this.endTime});
+  Todo({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.completed,
+  });
+
+  factory Todo.fromJson(Map<String, dynamic> json) {
+    return Todo(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      completed: json['completed'] == 1,
+    );
+  }
+
+Map<String, dynamic> toJson() {
+  return {
+    'id': id,
+    'title': title,
+    'description': description,
+    'completed': completed ? 1 : 0, // Convert boolean to 0/1
+  };
 }
 
+}
