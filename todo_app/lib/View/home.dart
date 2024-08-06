@@ -174,6 +174,86 @@ class _HomePageState extends State<HomePage> {
                           deleteFunction: (context) {
                             deleteTodo(index);
                           },
+                          updateFunction: (context) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                namecontroller.text = todoController
+                                    .todos[index].title; // Populate controller
+                                descriptcontroller.text = todoController
+                                    .todos[index]
+                                    .description; // Populate controller
+
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Edit Todo',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        controller: namecontroller,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          hintText: 'Todo title',
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      TextField(
+                                        controller: descriptcontroller,
+                                        maxLines: 5,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          hintText: 'Todo Description',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                        backgroundColor: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Todo updatedTodo = Todo(
+                                          id: todoController.todos[index].id,
+                                          title: namecontroller.text,
+                                          description: descriptcontroller.text,
+                                          completed: todoController
+                                              .todos[index].completed,
+                                        );
+                                        todoController.updateTodo(
+                                          updatedTodo.id,
+                                          updatedTodo,
+                                        );
+                                        Navigator.pop(context);
+                                        Get.snackbar('Updated',
+                                            'Task updated successfully');
+                                      },
+                                      child: const Text('Update'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           onChanged: (value) {
                             todoController.toggleTodoCompletion(
                                 todoController.todos[index].id);
@@ -193,5 +273,6 @@ class _HomePageState extends State<HomePage> {
 
   void deleteTodo(int index) {
     todoController.deleteTodo(todoController.todos[index].id);
+    todoController.fetchTodos();
   }
 }

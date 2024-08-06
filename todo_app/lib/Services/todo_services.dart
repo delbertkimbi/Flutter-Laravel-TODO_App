@@ -58,11 +58,12 @@ class ApiService {
   }
 
   Future<void> deleteTodo(int id) async {
-    final response = await http.delete(
-      Uri.parse("$baseUrl/todos/$id"),
-    );
+    final response = await http.delete(Uri.parse('$baseUrl/todos/$id'));
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
+      debugPrint('Delete request successful');
+    } else {
+      debugPrint('Failed to delete todo. Status code: ${response.statusCode}');
       throw Exception('Failed to delete todo');
     }
   }

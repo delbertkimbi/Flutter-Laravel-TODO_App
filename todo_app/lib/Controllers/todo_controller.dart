@@ -81,10 +81,16 @@ class TodoController extends GetxController {
 
   void deleteTodo(int id) async {
     try {
+      debugPrint('Attempting to delete todo with id: $id');
       await apiService.deleteTodo(id);
-      todos.removeWhere((element) => element.id == id);
+      debugPrint('Todo deleted successfully from backend');
+      todos.removeWhere((todo) => todo.id == id);
+      todos.refresh(); // Ensure the UI is updated
+    
+      debugPrint('Todo removed from local list and UI refreshed');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      debugPrint('Error deleting todo: $e');
+      Get.snackbar('Error', 'Failed to delete todo: $e');
     }
   }
 }
